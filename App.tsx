@@ -1,14 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
-import { Page } from './types';
-import { COURSES, NAV_ITEMS, EnhancedCourse } from './constants';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import CourseCard from './components/CourseCard';
-import InquiryForm from './components/InquiryForm';
-import ApplicationForm from './components/ApplicationForm';
-import SchedulePage from './components/SchedulePage';
-import PracticumPage from './components/PracticumPage';
+import { Page } from './types.ts';
+import { COURSES, NAV_ITEMS, EnhancedCourse } from './constants.tsx';
+import Navbar from './components/Navbar.tsx';
+import Hero from './components/Hero.tsx';
+import CourseCard from './components/CourseCard.tsx';
+import InquiryForm from './components/InquiryForm.tsx';
+import ApplicationForm from './components/ApplicationForm.tsx';
+import SchedulePage from './components/SchedulePage.tsx';
+import PracticumPage from './components/PracticumPage.tsx';
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<Page>(Page.Home);
@@ -39,7 +39,6 @@ const App: React.FC = () => {
     <>
       <Hero />
       
-      {/* 퀵 링크 / 최신 공지 섹션 */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -85,7 +84,6 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      {/* 인기 교육 과정 */}
       <section className="py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -102,135 +100,6 @@ const App: React.FC = () => {
       </section>
     </>
   );
-
-  const renderAllCoursesPage = () => {
-    const filteredCourses = COURSES.filter(course => {
-      const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          course.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = activeCategory === 'all' || course.category === activeCategory;
-      return matchesSearch && matchesCategory;
-    });
-
-    const categories = [
-      { id: 'all', label: '전체' },
-      { id: Page.Practicum, label: '현장실습' },
-      { id: Page.Communication, label: '세대별 소통' },
-      { id: Page.Professional, label: '전문가 직무' },
-      { id: Page.Leadership, label: '리더십' },
-    ];
-
-    return (
-      <section className="pt-48 pb-24 bg-white min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl font-extrabold text-slate-900 mb-4">전체 교육 과정</h1>
-            <p className="text-slate-500">율하평생교육원이 제공하는 모든 전문 커리큘럼을 한눈에 확인하세요.</p>
-          </div>
-
-          <div className="mb-12 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex flex-wrap justify-center gap-2">
-              {categories.map(cat => (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`px-5 py-2 rounded-full text-sm font-bold transition-all ${
-                    activeCategory === cat.id 
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' 
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
-            <div className="relative w-full md:w-80">
-              <input 
-                type="text" 
-                placeholder="강의명 또는 내용 검색"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl border-slate-200 bg-slate-50 focus:bg-white focus:ring-blue-500 focus:border-blue-500 text-sm"
-              />
-              <svg className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-          </div>
-
-          {filteredCourses.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {filteredCourses.map(course => (
-                <CourseCard key={course.id} course={course} onApply={handleApplyClick} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20 bg-slate-50 rounded-3xl border border-dashed border-slate-200">
-              <p className="text-slate-400 font-medium">검색 결과가 없습니다.</p>
-            </div>
-          )}
-        </div>
-      </section>
-    );
-  };
-
-  const renderNoticePage = () => (
-    <section className="pt-48 pb-24 bg-white min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl font-extrabold text-slate-900 mb-4">공지사항</h1>
-          <p className="text-slate-500">율하평생교육원의 새로운 소식과 안내사항을 확인하세요.</p>
-        </div>
-        
-        <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
-          <table className="w-full text-left">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-100">
-                <th className="px-8 py-5 text-sm font-bold text-slate-900">번호</th>
-                <th className="px-8 py-5 text-sm font-bold text-slate-900">제목</th>
-                <th className="px-8 py-5 text-sm font-bold text-slate-900">카테고리</th>
-                <th className="px-8 py-5 text-sm font-bold text-slate-900 text-right">날짜</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-50">
-              {[
-                { id: 3, title: '2024년도 2학기 수강생 모집 안내', category: '모집', date: '2024.03.20' },
-                { id: 2, title: '개인정보보호 실무 과정 강의실 변경 공지', category: '교육', date: '2024.03.18' },
-                { id: 1, title: '율하평생교육원 우수 강사진 위촉식 성료', category: '소식', date: '2024.03.15' },
-              ].map((notice) => (
-                <tr key={notice.id} className="hover:bg-slate-50 transition-colors cursor-pointer group">
-                  <td className="px-8 py-6 text-sm text-slate-400 font-mono">{notice.id}</td>
-                  <td className="px-8 py-6 text-sm font-bold text-slate-900 group-hover:text-blue-600">{notice.title}</td>
-                  <td className="px-8 py-6">
-                    <span className="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-[10px] font-bold">{notice.category}</span>
-                  </td>
-                  <td className="px-8 py-6 text-sm text-slate-400 text-right font-mono">{notice.date}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-  );
-
-  const renderCoursePage = (page: Page, title: string, subtitle: string) => {
-    const filteredCourses = COURSES.filter(c => c.category === page);
-    return (
-      <section className="pt-48 pb-24 bg-white min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-16 border-l-4 border-slate-900 pl-8">
-            <h1 className="text-4xl font-extrabold text-slate-900 mb-4">{title}</h1>
-            <p className="text-xl text-slate-500">{subtitle}</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {filteredCourses.map(course => (
-              <CourseCard key={course.id} course={course} onApply={handleApplyClick} />
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  };
 
   const renderContent = () => {
     if (showSuccess) {
@@ -254,29 +123,44 @@ const App: React.FC = () => {
 
     switch (currentPage) {
       case Page.Home: return renderHome();
-      case Page.AllCourses: return renderAllCoursesPage();
       case Page.Practicum: 
         return (
           <div className="pt-20">
             <PracticumPage onApply={handleApplyClick} />
           </div>
         );
-      case Page.Notice: return renderNoticePage();
-      case Page.Schedule:
+      case Page.Notice: 
         return (
-          <section className="pt-48 pb-24 bg-white min-h-screen">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="text-center mb-16">
-                <h1 className="text-4xl font-extrabold text-slate-900 mb-4">교육 일정</h1>
-                <p className="text-slate-500">율하평생교육원의 4월 주요 강의 일정을 안내해 드립니다.</p>
-              </div>
-              <SchedulePage />
-            </div>
-          </section>
+            <section className="pt-48 pb-24 bg-white min-h-screen">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-16">
+                    <h1 className="text-4xl font-extrabold text-slate-900 mb-4">공지사항</h1>
+                    <p className="text-slate-500">율하평생교육원의 새로운 소식과 안내사항을 확인하세요.</p>
+                </div>
+                <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
+                    <table className="w-full text-left">
+                    <thead>
+                        <tr className="bg-slate-50 border-b border-slate-100">
+                        <th className="px-8 py-5 text-sm font-bold text-slate-900">제목</th>
+                        <th className="px-8 py-5 text-sm font-bold text-slate-900 text-right">날짜</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50">
+                        {[
+                        { id: 1, title: '2024년도 2학기 수강생 모집 안내', date: '2024.03.20' },
+                        { id: 2, title: '개인정보보호 실무 과정 강의실 변경 공지', date: '2024.03.18' }
+                        ].map((notice) => (
+                        <tr key={notice.id} className="hover:bg-slate-50 transition-colors cursor-pointer">
+                            <td className="px-8 py-6 text-sm font-bold text-slate-900">{notice.title}</td>
+                            <td className="px-8 py-6 text-sm text-slate-400 text-right font-mono">{notice.date}</td>
+                        </tr>
+                        ))}
+                    </tbody>
+                    </table>
+                </div>
+                </div>
+            </section>
         );
-      case Page.Communication: return renderCoursePage(Page.Communication, '세대별 소통 & 복지', '가족과 사회 구성원의 유대를 강화하는 전문 심리 및 복지 과정');
-      case Page.Professional: return renderCoursePage(Page.Professional, '전문가 직무 & 법률', '최신 법률 해석과 실무 역량을 강화하는 하이엔드 전문 과정');
-      case Page.Leadership: return renderCoursePage(Page.Leadership, '리더십 & 소양', '지속 가능한 리더십과 깊이 있는 인문학적 성찰의 시간');
       case Page.Apply:
         return (
           <section className="pt-48 pb-24 bg-slate-50 min-h-screen">
@@ -313,6 +197,22 @@ const App: React.FC = () => {
             </div>
           </section>
         );
+      case Page.AllCourses:
+        return (
+            <section className="pt-48 pb-24 bg-white min-h-screen">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16">
+                        <h1 className="text-4xl font-extrabold text-slate-900 mb-4">전체 교육 과정</h1>
+                        <p className="text-slate-500">율하평생교육원의 모든 교육 프로그램을 확인하세요.</p>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {COURSES.map(course => (
+                            <CourseCard key={course.id} course={course} onApply={handleApplyClick} />
+                        ))}
+                    </div>
+                </div>
+            </section>
+        )
       default: return renderHome();
     }
   };
@@ -327,47 +227,15 @@ const App: React.FC = () => {
         {renderContent()}
       </main>
       <footer className="bg-slate-950 text-white pt-24 pb-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-16 mb-20">
-            <div className="md:col-span-5">
-              <div className="flex items-center space-x-3 mb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="flex items-center justify-center space-x-3 mb-8">
                 <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center font-bold">율</div>
                 <span className="text-2xl font-extrabold tracking-tight">율하평생교육원</span>
-              </div>
-              <p className="text-slate-400 mb-8 max-w-sm leading-relaxed">
-                전직 정부 관료 및 학계 전문가들이 주축이 된 율하평생교육원은 
-                사회의 복잡한 문제들을 실질적으로 해결하기 위한 
-                전문 교육의 선두주자입니다.
-              </p>
             </div>
-            <div className="md:col-span-2">
-              <h4 className="text-sm font-bold uppercase tracking-widest text-blue-500 mb-8">Navigation</h4>
-              <ul className="space-y-4 text-slate-400 font-medium">
-                {NAV_ITEMS.map(item => (
-                  <li key={item.id}><button onClick={() => setCurrentPage(item.id as Page)} className="hover:text-white transition-colors">{item.label}</button></li>
-                ))}
-              </ul>
-            </div>
-            <div className="md:col-span-2">
-              <h4 className="text-sm font-bold uppercase tracking-widest text-blue-500 mb-8">Information</h4>
-              <ul className="space-y-4 text-slate-400 font-medium">
-                <li><button className="hover:text-white transition-colors">이용약관</button></li>
-                <li><button className="hover:text-white transition-colors">개인정보처리방침</button></li>
-                <li><button className="hover:text-white transition-colors">강사지원</button></li>
-              </ul>
-            </div>
-            <div className="md:col-span-3">
-              <h4 className="text-sm font-bold uppercase tracking-widest text-blue-500 mb-8">Contact</h4>
-              <ul className="space-y-4 text-slate-400 text-sm">
-                <li>02-123-4567</li>
-                <li>help@yulhaedu.com</li>
-                <li className="leading-relaxed">서울시 강남구 평생학습로 123<br />율하빌딩 본관 4층</li>
-              </ul>
-            </div>
-          </div>
-          <div className="pt-12 border-t border-slate-900 text-center text-slate-600 text-[11px] font-bold uppercase tracking-[0.2em]">
-            &copy; {new Date().getFullYear()} Yulha Education Academy. All Rights Reserved.
-          </div>
+            <p className="text-slate-400 mb-8 max-w-md mx-auto leading-relaxed">
+                서울시 강남구 평생학습로 123 | 문의: 02-123-4567<br/>
+                &copy; {new Date().getFullYear()} Yulha Education Academy.
+            </p>
         </div>
       </footer>
     </div>
