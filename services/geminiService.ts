@@ -1,9 +1,17 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export async function askEducationAI(query: string): Promise<string> {
+  // process 객체가 안전하게 존재하는지 확인 후 API 키 추출
+  const apiKey = typeof process !== 'undefined' ? process.env.API_KEY : "";
+  
+  if (!apiKey) {
+    console.warn("API_KEY is not configured.");
+    return "현재 상담 서비스 설정이 완료되지 않았습니다. 교육원으로 직접 문의 부탁드립니다.";
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
